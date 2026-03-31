@@ -1,0 +1,141 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+class Student
+{
+    public string Name;
+    public int Age;
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // =======================
+        // 📁 ЗАДАНИЕ 1 — ФАЙЛ + LIST
+        // =======================
+
+        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+
+        if (!File.Exists(path))
+        {
+            File.WriteAllLines(path, new string[]
+            {
+                "Jaanuar", "Veebruar", "Märts"
+            });
+        }
+
+        List<string> kuud = new List<string>(File.ReadAllLines(path));
+
+        Console.WriteLine("📄 Содержимое файла:");
+        foreach (string kuu in kuud)
+        {
+            Console.WriteLine(kuu);
+        }
+
+        Console.WriteLine("\nВведите месяц:");
+        string input = Console.ReadLine();
+        kuud.Add(input);
+
+        if (kuud.Contains(input))
+            Console.WriteLine("Найден");
+        else
+            Console.WriteLine("Не найден");
+
+        kuud.Remove("Juuni");
+
+        if (kuud.Count > 0)
+            kuud[0] = "Muudetud kuu";
+
+        File.WriteAllLines(path, kuud);
+        Console.WriteLine("Файл сохранён!\n");
+
+
+        // =======================
+        // 🔢 ЗАДАНИЕ 2 — МАССИВ
+        // =======================
+
+        int[] arr = new int[5];
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            Console.Write("Введите число: ");
+            arr[i] = int.Parse(Console.ReadLine());
+        }
+
+        Console.WriteLine("Все числа:");
+        foreach (int x in arr)
+        {
+            Console.WriteLine(x);
+        }
+
+        int sum = 0;
+        foreach (int x in arr)
+        {
+            sum += x;
+        }
+
+        Console.WriteLine("Сумма: " + sum);
+
+        int max = arr[0];
+        foreach (int x in arr)
+        {
+            if (x > max)
+                max = x;
+        }
+
+        Console.WriteLine("Максимум: " + max + "\n");
+
+
+        // =======================
+        // 📋 ЗАДАНИЕ 3 — LIST
+        // =======================
+
+        List<int> list = new List<int>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            Console.Write("Введите число: ");
+            list.Add(int.Parse(Console.ReadLine()));
+        }
+
+        Console.Write("Какое число удалить: ");
+        int del = int.Parse(Console.ReadLine());
+        list.Remove(del);
+
+        Console.WriteLine("Список:");
+        foreach (int x in list)
+        {
+            Console.WriteLine(x);
+        }
+
+
+        // =======================
+        // 🧱 ЗАДАНИЕ 4 — КЛАСС
+        // =======================
+
+        Student s = new Student();
+
+        Console.Write("\nВведите имя: ");
+        s.Name = Console.ReadLine();
+
+        Console.Write("Введите возраст: ");
+        s.Age = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Имя: " + s.Name);
+        Console.WriteLine("Возраст: " + s.Age);
+
+
+        // =======================
+        // ⭐ БОНУС — запись в файл
+        // =======================
+
+        using (StreamWriter sw = new StreamWriter(path, true))
+        {
+            sw.WriteLine("Student: " + s.Name + ", Age: " + s.Age);
+        }
+
+        Console.WriteLine("\nДанные студента записаны в файл!");
+    }
+}
