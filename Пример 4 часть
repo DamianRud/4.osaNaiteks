@@ -1,0 +1,114 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // 🧾 Запись в файл (StreamWriter)
+        try
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+            StreamWriter text = new StreamWriter(path, true); // true = добавить в конец
+            Console.WriteLine("Sisesta mingi tekst: ");
+            string lause = Console.ReadLine();
+            text.WriteLine(lause);
+            text.Close();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Mingi viga failiga");
+        }
+
+
+        // 🛑 Пример закрытия файла
+        string path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+
+        StreamWriter sw = new StreamWriter(path2);
+        sw.WriteLine("Midagi");
+        sw.Close(); // обязательно
+
+
+        // ✅ Через using (лучше)
+        using (StreamWriter sw2 = new StreamWriter(path2))
+        {
+            sw2.WriteLine("Midagi");
+        }
+
+
+        // 📖 Чтение файла (StreamReader)
+        try
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+            StreamReader text = new StreamReader(path);
+            string laused = text.ReadToEnd();
+            text.Close();
+            Console.WriteLine(laused);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Mingi viga failiga, ei saa faili lugeda");
+        }
+
+
+        // 📋 Чтение строк в List<string>
+        List<string> kuude_list = new List<string>();
+        try
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+            foreach (string rida in File.ReadAllLines(path))
+            {
+                kuude_list.Add(rida);
+            }
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Viga failiga!");
+        }
+
+
+        // ✏️ Работа со списком
+        foreach (string kuu in kuude_list)
+        {
+            Console.WriteLine(kuu);
+        }
+
+        // Удаление "Juuni"
+        kuude_list.Remove("Juuni");
+
+        // Изменение первого элемента
+        if (kuude_list.Count > 0)
+            kuude_list[0] = "Veeel kuuu";
+
+        Console.WriteLine("--------------Kustutasime juuni-----------");
+
+        foreach (string kuu in kuude_list)
+        {
+            Console.WriteLine(kuu);
+        }
+
+
+        // 🔍 Поиск в списке
+        Console.WriteLine("Sisesta kuu nimi, mida otsida:");
+        string otsitav = Console.ReadLine();
+
+        if (kuude_list.Contains(otsitav))
+            Console.WriteLine("Kuu " + otsitav + " on olemas.");
+        else
+            Console.WriteLine("Sellist kuud pole.");
+
+
+        // 💾 Сохранение списка обратно в файл
+        string path3 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+        File.WriteAllLines(path3, kuude_list);
+        Console.WriteLine("Andmed on salvestatud.");
+
+
+        // 📌 Проверка существования файла
+        if (!File.Exists(path3))
+        {
+            File.WriteAllLines(path3, new string[] { "Jaanuar", "Veebruar", "Märts" });
+        }
+    }
+}
