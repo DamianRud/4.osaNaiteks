@@ -1,0 +1,73 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Kuud.txt");
+
+        try
+        {
+            // 📌 1. Проверка существования файла
+            if (!File.Exists(path))
+            {
+                File.WriteAllLines(path, new string[]
+                {
+                    "Jaanuar", "Veebruar", "Märts"
+                });
+            }
+
+            // 📖 2. Чтение файла в список
+            List<string> kuud = new List<string>(File.ReadAllLines(path));
+
+            Console.WriteLine("📄 Файл содержит:");
+            foreach (string kuu in kuud)
+            {
+                Console.WriteLine(kuu);
+            }
+
+            // ✍️ 3. Добавление новой строки
+            Console.WriteLine("\nВведите новый месяц:");
+            string uusKuu = Console.ReadLine();
+            kuud.Add(uusKuu);
+
+            // 🔍 4. Поиск
+            Console.WriteLine("\nВведите месяц для поиска:");
+            string otsitav = Console.ReadLine();
+
+            if (kuud.Contains(otsitav))
+                Console.WriteLine("Найден!");
+            else
+                Console.WriteLine("Не найден.");
+
+            // ❌ 5. Удаление
+            Console.WriteLine("\nВведите месяц для удаления:");
+            string kustuta = Console.ReadLine();
+            kuud.Remove(kustuta);
+
+            // ✏️ 6. Изменение первого элемента
+            if (kuud.Count > 0)
+            {
+                kuud[0] = "Muudetud kuu";
+            }
+
+            // 💾 7. Сохранение обратно в файл
+            File.WriteAllLines(path, kuud);
+
+            Console.WriteLine("\n💾 Данные сохранены!");
+
+            // 📋 8. Показ обновлённого списка
+            Console.WriteLine("\n📄 Обновлённый список:");
+            foreach (string kuu in kuud)
+            {
+                Console.WriteLine(kuu);
+            }
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Ошибка при работе с файлом!");
+        }
+    }
+}
